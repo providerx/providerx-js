@@ -1,0 +1,16 @@
+{
+  "name": "react-providerx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rxjs": "^6.6.6",
+    "rxjs-hooks": "^0.6.2"
+  }
+}
