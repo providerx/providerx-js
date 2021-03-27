@@ -1,16 +1,20 @@
 {
   "name": "react-providerx",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "A state management library built for React, using RxJS and Observables",
+  "main": "lib/index.js",
+  "types": "lib",
+  "homepage": "https://github.com/DudeBro249/providerx",
   "scripts": {
-    "build": "tsc -p ."
+    "build": "npx tsc -p ."
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "DudeBro249",
+  "license": "Apache-2.0",
   "dependencies": {
-    "rxjs": "^6.6.6",
-    "rxjs-hooks": "^0.6.2"
+    "rxjs": "^6.6.6"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.3"
   }
 }

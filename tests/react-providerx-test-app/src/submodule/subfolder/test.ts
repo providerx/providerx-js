@@ -1,4 +1,4 @@
-import { ObservableProvider } from '../providers/observableProvider'
+import { ObservableProvider } from 'react-providerx/src'
 import { useState, useEffect } from 'react'
 
 type UseProviderValues<T> = {
