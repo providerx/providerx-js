@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { ObservableProvider, refresh } from 'react-providerx'
+import { from } from 'rxjs';
+import { useProvider } from 'react-providerx'
 
-function App() {
+const userProvider = new ObservableProvider(() => {
+  const fetchData = async (url: string): Promise<any> => {
+    const response = await fetch(url)
+    const json = await response.json()
+    return json
+  }
+  
+  const randomUserId = Math.floor(Math.random() * 11) + 1
+  const user$ = from(fetchData(`https://jsonplaceholder.typicode.com/users/${randomUserId}`))
+  return user$
+});
+
+
+
+const App: React.FC = () => {
+  const { isLoading, data } = useProvider(userProvider)
+  if (isLoading) {
+    return (
+      <div className="App">
+        Loading...
+      </div>
+    )
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {data.username}
+      <button onClick={() => refresh(userProvider)}>
+        Click me to refresh user data
+      </button>
     </div>
   );
-}
+};
 
 export default App;
