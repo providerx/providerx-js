@@ -1,23 +1,23 @@
-import { ObservableProvider } from '../providers/observableProvider'
+import { ObservableProvider } from '../observableProvider'
 import { useState, useEffect } from 'react'
+import { AutoDisposeObservableProvider } from '../observableProvider/autoDispose'
 
 type UseProviderValues<T> = {
     isLoading: boolean
     data: T
+    error: any
 }
 
-export const useProvider = <T>(provider: ObservableProvider<T>) => {
+export const useProvider = <T>(provider: ObservableProvider<T> | AutoDisposeObservableProvider<T>) => {
     const [currentValue, setCurrentValue]  = useState<T | null>(null)
 
     useEffect(() => {
-        const handleSubscriptionValue = (value: any) => {
-            setCurrentValue(value)
-        }
-        const subscription = (provider.behaviorSubject$.asObservable() as any).subscribe(handleSubscriptionValue)
+        const subscription = provider.subscribe(setCurrentValue)
         return () => {
             subscription.unsubscribe()
+            provider.registerUnsubscribe()
         }
-    }, [provider.behaviorSubject$])
+    }, [provider])
 
     return {
         isLoading: currentValue === null || currentValue === undefined,
