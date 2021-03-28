@@ -38,3 +38,8 @@ const Component: React.FC = () => {
     )
 }
 ```
+## Supporters
+[![Stargazers repo roster for @DudeBro249/providerx](https://reporoster.com/stars/DudeBro249/providerx)](https://github.com/DudeBro249/providerx/stargazers)
+
+## License
+[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
