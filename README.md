@@ -2,6 +2,8 @@
 A React state management library built on top of RxJS and Observables
 
 ## Usage:
+The library will cache data within your ObservableProvider, so you can grab values from a provider with the `useProvider`
+hook - without re-fetching data.
 ```tsx
 import React from 'react'
 import { useProvider, ObservableProvider, refresh } from 'react-providerx'
