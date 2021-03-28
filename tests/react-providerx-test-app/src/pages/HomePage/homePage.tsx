@@ -1,9 +1,9 @@
-import { useProvider } from "react-providerx";
+import { refresh, useProvider } from "react-providerx";
 import { signOut } from "../../services/auth";
-import { authStateProvider$ } from "../../shared/authState";
+import { userDataPromiseProvider$ } from "../../shared/userData";
 
-export const HomePage: React.FC = () => {
-    const { isLoading, data: user } = useProvider(authStateProvider$)
+const SubComponent: React.FC = () => {
+  const { isLoading, data: userData } = useProvider(userDataPromiseProvider$)
     if(isLoading) {
       return <div className="App">
         Loading...
@@ -11,10 +11,30 @@ export const HomePage: React.FC = () => {
     }
     return (
       <div className="App">
-        {(user as any).displayName}
-        <button onClick={signOut}>
-          Click to Sign Out
-        </button>
+        {(userData as any).email}
+      </div>
+    );
+}
+
+export const HomePage: React.FC = () => {
+    const { isLoading, data: userData } = useProvider(userDataPromiseProvider$)
+    if(isLoading) {
+      return <div className="App">
+        Loading...
+      </div>
+    }
+    return (
+      <div className="App">
+        {(userData as any).email}
+        <div className="col">
+          <button onClick={() => refresh(userDataPromiseProvider$)}>
+            Click to Refresh User Data
+          </button>
+          <button onClick={signOut}>
+            Click to Sign Out
+          </button>
+        </div>
+        <SubComponent />
       </div>
     );
 }
