@@ -1,6 +1,7 @@
 import { ObservableProvider } from '../observableProvider'
 import { useState, useEffect } from 'react'
 import { AutoDisposeObservableProvider } from '../observableProvider/autoDispose'
+import { BaseObservableProvider } from '../observableProvider/base'
 
 type UseProviderValues<T> = {
     isLoading: boolean
@@ -8,7 +9,7 @@ type UseProviderValues<T> = {
     error: any
 }
 
-export const useProvider = <T>(provider: ObservableProvider<T> | AutoDisposeObservableProvider<T>) => {
+export const useProvider = <T>(provider: BaseObservableProvider<T>) => {
     const [currentValue, setCurrentValue]  = useState<T | null>(null)
     const [currentError, setCurrentError] = useState<any | null>(null)
 
@@ -24,7 +25,9 @@ export const useProvider = <T>(provider: ObservableProvider<T> | AutoDisposeObse
         return () => {
             valueSubscription.unsubscribe()
             errorSubscription.unsubscribe()
-            provider.registerUnsubscribe()
+            if(provider instanceof AutoDisposeObservableProvider) {
+                provider.registerUnsubscribe()
+            } 
         }
     }, [provider])
 
