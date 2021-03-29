@@ -48,7 +48,6 @@ export class AutoDisposeObservableProvider<T> extends BaseObservableProvider<T> 
 
     _reset() {
         if(this._internalSubscription !== undefined) {
-            console.log('unsubscribing')
             this._internalSubscription.unsubscribe()
         }
         this._valueSubject$ = new BehaviorSubject(null)
