@@ -7,6 +7,7 @@ export class AutoDisposeObservableProvider<T> {
     observableCreator
     ref: ProviderReference
     _observable$: Observable<T>
+    _internalSubscription?: Subscription
 
     constructor(observableCreator: (ref: ProviderReference) => Observable<T>) {
         this.observableCreator = observableCreator
@@ -44,7 +45,7 @@ export class AutoDisposeObservableProvider<T> {
         if(this._observable$ === null) {
             throw 'observableCreator cannot return null. It must return an instance of Observable'
         }
-        this._observable$.subscribe(
+        this._internalSubscription = this._observable$.subscribe(
             (val: T) => {
                 this._valueSubject$.next(val as any)
                 this._errorSubject$.next(null as any)
@@ -57,6 +58,10 @@ export class AutoDisposeObservableProvider<T> {
     }
 
     _reset() {
+        if(this._internalSubscription !== undefined) {
+            console.log('unsubscribing')
+            this._internalSubscription.unsubscribe()
+        }
         this._valueSubject$ = new BehaviorSubject(null)
         this._errorSubject$ = new BehaviorSubject(null)
     }
