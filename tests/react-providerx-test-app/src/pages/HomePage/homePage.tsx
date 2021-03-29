@@ -1,12 +1,11 @@
 import { refresh, useProvider } from "react-providerx";
 import { signOut } from "../../services/auth";
+import { documentFamilyProvider$ } from "../../shared/document";
 import { userDataProvider$ } from "../../shared/userData";
 import { errorProvider$ } from "../../shared/userList";
 
 const SubComponent: React.FC = () => {
   const { isLoading, data, error } = useProvider(errorProvider$)
-  console.log('SubComponent: the value of error is: ')
-  console.log(error)
     if(isLoading) {
       return <div className="App">
         Loading data...
@@ -21,6 +20,25 @@ const SubComponent: React.FC = () => {
     return <div>
       { JSON.stringify(data) }
     </div>
+}
+
+const FamilyTester: React.FC = () => {
+  const { isLoading, data, error } = useProvider(documentFamilyProvider$.pass('ICvuiU7397D9BjgrrYcq'))
+    if(isLoading) {
+      return <div className="App">
+        Loading data...
+      </div>
+    }
+    if(error !== null) {
+      return <div>
+        Something went wrong...
+      </div>
+    }
+    return (
+      <div>
+        { JSON.stringify(data) }
+      </div>
+    )
 }
 
 export const HomePage: React.FC = () => {
@@ -49,6 +67,7 @@ export const HomePage: React.FC = () => {
           </button>
         </div>
         <SubComponent />
+        <FamilyTester />
       </div>
     );
 }

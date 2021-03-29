@@ -1,7 +1,8 @@
 import { BehaviorSubject, from, Observable, Subscription } from "rxjs";
 import { ProviderReference } from "../models/providerReference";
+import { BaseObservableProvider } from "./base";
 
-export class AutoDisposeObservableProvider<T> {
+export class AutoDisposeObservableProvider<T> extends BaseObservableProvider<T> {
     _valueSubject$: BehaviorSubject<T> | BehaviorSubject<null>
     _errorSubject$: BehaviorSubject<T> | BehaviorSubject<null>
     observableCreator
@@ -10,6 +11,7 @@ export class AutoDisposeObservableProvider<T> {
     _internalSubscription?: Subscription
 
     constructor(observableCreator: (ref: ProviderReference) => Observable<T>) {
+        super(observableCreator)
         this.observableCreator = observableCreator
         this.ref = {
             maintainState: true
@@ -18,22 +20,9 @@ export class AutoDisposeObservableProvider<T> {
         this._valueSubject$ = new BehaviorSubject(null)
         this._errorSubject$ = new BehaviorSubject(null)
     }
-
-    public get valueObservable() {
-        return this._valueSubject$.asObservable() as Observable<T>
-    }
-
-    public get errorObservable() {
-        return this._errorSubject$.asObservable() as Observable<T>
-    }
     
     static fromPromise<S>(promise: () => Promise<S>): AutoDisposeObservableProvider<S> {
         return new AutoDisposeObservableProvider<S>(() => (from(promise()) as any))
-    }
-
-    subscribe(dataCallback: (value: T) => void, errorCallback: (error: any) => void): Subscription[] {
-        this._compute()
-        return [this.valueObservable.subscribe(dataCallback), this.errorObservable.subscribe(errorCallback)]
     }
     
     _compute() {
@@ -59,7 +48,6 @@ export class AutoDisposeObservableProvider<T> {
 
     _reset() {
         if(this._internalSubscription !== undefined) {
-            console.log('unsubscribing')
             this._internalSubscription.unsubscribe()
         }
         this._valueSubject$ = new BehaviorSubject(null)
