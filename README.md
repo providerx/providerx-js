@@ -10,19 +10,25 @@ import { useProvider, ObservableProvider, refresh } from 'react-providerx'
 import { from } from 'rxjs'
 import { tap } from 'rxjs/operators'
 
-const userResponseProvider = new ObservableProvider(() => {
-    let user$ = from(fetch('https://jsonplaceholder.typicode.com/users/1'))
-    user$ = user$.pipe(
-        tap(user => {
-            console.log('The value of user is: ')
-            console.log(user)
+export const userResponseProvider$ = ObservableProvider.autoDispose((ref) => {
+    const fetchErrorApi = async () => {
+        const response = await fetch('https://jsonplaceholder.typicode.com/users/1')
+        const json = await response.json()
+        return json
+    }
+
+    return from(fetchErrorApi()).pipe(
+        catchError((error: Error) => {
+            console.log('there was an error in fetching the api')
+            ref.maintainState = false
+            return throwError(error)
         }),
     )
-    return user$
 })
 
+
 const Component: React.FC = () => {
-    const { isLoading, data } = useProvider(userResponseProvider)
+    const { isLoading, data, error } = useProvider(userResponseProvider$)
     if(isLoading) {
         return (
             <div>
@@ -33,7 +39,7 @@ const Component: React.FC = () => {
     return (
         <div>
             {data}
-            <button onClick={() => refresh(userResponseProvider)} >Click to refresh</button>
+            <button onClick={() => refresh(userResponseProvider$)}>Click to refresh</button>
         </div>
     )
 }

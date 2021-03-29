@@ -1,6 +1,5 @@
-import { ObservableProvider } from "./observableProvider"
-import { AutoDisposeObservableProvider } from "./observableProvider/autoDispose"
+import { BaseObservableProvider } from "./observableProvider/base"
 
-export const refresh = (provider: ObservableProvider<any> | AutoDisposeObservableProvider<any>) => {
+export const refresh = <T>(provider: BaseObservableProvider<T>) => {
     return provider._compute()
 }
