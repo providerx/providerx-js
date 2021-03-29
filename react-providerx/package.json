@@ -8,7 +8,12 @@
   "scripts": {
     "build": "npx tsc -p ."
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "state management",
+    "state",
+    "provider"
+  ],
   "author": "DudeBro249",
   "license": "Apache-2.0",
   "dependencies": {

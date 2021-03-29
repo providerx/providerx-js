@@ -10,18 +10,27 @@ type UseProviderValues<T> = {
 
 export const useProvider = <T>(provider: ObservableProvider<T> | AutoDisposeObservableProvider<T>) => {
     const [currentValue, setCurrentValue]  = useState<T | null>(null)
+    const [currentError, setCurrentError] = useState<any | null>(null)
 
     useEffect(() => {
-        const subscription = provider.subscribe(setCurrentValue)
+        const handleError = (error: any) => {
+            setCurrentError(error)
+        }
+
+        const handleValue = (value: T) => {
+            setCurrentValue(value)
+        }
+        const [valueSubscription, errorSubscription] = provider.subscribe(handleValue, handleError)
         return () => {
-            subscription.unsubscribe()
+            valueSubscription.unsubscribe()
+            errorSubscription.unsubscribe()
             provider.registerUnsubscribe()
         }
     }, [provider])
 
     return {
-        isLoading: currentValue === null || currentValue === undefined,
+        isLoading: (currentValue === null || currentValue === undefined) && (currentError === null),
         data: currentValue,
-        error: null
+        error: currentError,
     } as UseProviderValues<T>
 }
