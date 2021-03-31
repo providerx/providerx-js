@@ -1,19 +1,23 @@
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
 export abstract class BaseObservableProvider<T> {
-    _valueSubject$: BehaviorSubject<T> | BehaviorSubject<null>
-    _errorSubject$: BehaviorSubject<T> | BehaviorSubject<null>
+    _valueSubject$: BehaviorSubject<T> | BehaviorSubject<undefined>
+    _errorSubject$: BehaviorSubject<T> | BehaviorSubject<undefined>
     observableCreator
     _observable$: Observable<T>
+    _internalSubscription?: Subscription
 
     constructor(observableCreator: any) {
         this.observableCreator = observableCreator
         this._observable$ = new Observable()
-        this._valueSubject$ = new BehaviorSubject(null)
-        this._errorSubject$ = new BehaviorSubject(null)
+        this._valueSubject$ = new BehaviorSubject(undefined)
+        this._errorSubject$ = new BehaviorSubject(undefined)
     }
     
-    public get valueObservable() {
+    public get observable() {
+        if(this._internalSubscription === undefined) {
+            this._compute()
+        }
         return this._valueSubject$.asObservable() as Observable<T>
     }
 
@@ -23,7 +27,7 @@ export abstract class BaseObservableProvider<T> {
 
     subscribe(dataCallback: (value: T) => void, errorCallback: (error: any) => void): Subscription[] {
         this._compute()
-        return [this.valueObservable.subscribe(dataCallback), this.errorObservable.subscribe(errorCallback)]
+        return [this.observable.subscribe(dataCallback), this.errorObservable.subscribe(errorCallback)]
     }
     
     abstract _compute(): void

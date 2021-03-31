@@ -22,7 +22,7 @@ There are 4 important things to note here:
 - All providers must return an RxJS `Observable` which is being done with `of` from `rxjs`
 - Observables can be of any type - `string`, `number`, `Promise`, etc.
 
-## What about for Asynchronous Operations?
+## What about Asynchronous Operations?
 Many times you will need to perform asynchronous I/O in your application
 
 Here is how you would define a provider which contains an `Observable<Promise>`
@@ -41,6 +41,6 @@ const provider = new ObservableProvider(() => {
   return observable
 })
 ```
-- Here we are creating an asynchronous function to fetch an api result
-- We are then using the `from` function in RxJS to convert that `Promise` to an `Observable`
+- Here we are creating an asynchronous function to fetch an api result. This returns a `Promise`
+- We are then using the RxJS `from` function to convert that `Promise` to an `Observable`
 - We then return the observable

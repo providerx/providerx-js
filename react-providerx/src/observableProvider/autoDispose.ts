@@ -3,8 +3,8 @@ import { ProviderReference } from "../models/providerReference";
 import { BaseObservableProvider } from "./base";
 
 export class AutoDisposeObservableProvider<T> extends BaseObservableProvider<T> {
-    _valueSubject$: BehaviorSubject<T> | BehaviorSubject<null>
-    _errorSubject$: BehaviorSubject<T> | BehaviorSubject<null>
+    _valueSubject$: BehaviorSubject<T> | BehaviorSubject<undefined>
+    _errorSubject$: BehaviorSubject<T> | BehaviorSubject<undefined>
     observableCreator
     ref: ProviderReference
     _observable$: Observable<T>
@@ -17,8 +17,8 @@ export class AutoDisposeObservableProvider<T> extends BaseObservableProvider<T> 
             maintainState: true
         }
         this._observable$ = new Observable()
-        this._valueSubject$ = new BehaviorSubject(null)
-        this._errorSubject$ = new BehaviorSubject(null)
+        this._valueSubject$ = new BehaviorSubject(undefined)
+        this._errorSubject$ = new BehaviorSubject(undefined)
     }
     
     static fromPromise<S>(promise: () => Promise<S>): AutoDisposeObservableProvider<S> {
@@ -50,8 +50,8 @@ export class AutoDisposeObservableProvider<T> extends BaseObservableProvider<T> 
         if(this._internalSubscription !== undefined) {
             this._internalSubscription.unsubscribe()
         }
-        this._valueSubject$ = new BehaviorSubject(null)
-        this._errorSubject$ = new BehaviorSubject(null)
+        this._valueSubject$ = new BehaviorSubject(undefined)
+        this._errorSubject$ = new BehaviorSubject(undefined)
     }
 
     registerUnsubscribe() {

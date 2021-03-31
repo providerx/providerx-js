@@ -15,7 +15,7 @@ const App: React.FC = () => {
       </div>
     )
   }
-  return data === 'not-logged-in' ? <LoginPage /> : <HomePage />
+  return data === null ? <LoginPage /> : <HomePage />
 };
 
 export default App;
