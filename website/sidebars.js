@@ -12,5 +12,14 @@ module.exports = {
         'thank-you',
       ],
     },
+    {
+      type: 'category',
+      label: 'Concepts',
+      items: [
+        'concepts/providers',
+        'concepts/reading',
+        'concepts/combining'
+      ]
+    }
   ],
 };
