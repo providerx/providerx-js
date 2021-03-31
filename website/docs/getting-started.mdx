@@ -1,0 +1,53 @@
+---
+title: Getting Started
+slug: /
+---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+## Installation
+
+<Tabs
+  groupId="providerx-installation"
+  defaultValue="react-providerx-installation"
+  values={[
+    { label: 'React', value: 'react-providerx-installation', },
+  ]}
+>
+<TabItem value="react-providerx-installation">
+
+```powershell
+npm install react-providerx
+```
+</TabItem>
+</Tabs>
+
+## Hello World Example
+<Tabs
+  groupId="providerx-helloworld-example"
+  defaultValue="react-providerx-helloworld-example"
+  values={[
+    { label: 'React', value: 'react-providerx-helloworld-example', },
+  ]}
+>
+<TabItem value="react-providerx-helloworld-example">
+
+```typescript
+import { from } from 'rxjs'
+import { useProvider } from 'react-providerx'
+
+const messageProvider = new ObservableProvider(() => {
+  return of('hello world')
+})
+
+function App() {
+  const { data } = useProvider(messageProvider)
+  return (
+    <div>
+      data
+    </div>
+  )
+}
+```
+</TabItem>
+</Tabs>

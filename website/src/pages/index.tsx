@@ -8,32 +8,32 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: 'Easy to Use',
+    title: 'Boilerplate Free',
     imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        No more writing extra boilerplate code. Just define your <code>ObservableProvider</code>
+        and consume state from your application!
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Easy State Access',
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Easily access your data and providers with simple hooks. You can also combine providers,
+        and read them from anywhere
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Framework Independent',
     imageUrl: 'img/undraw_docusaurus_react.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        The core logic of this library does not depend on any frontend Javascript framework
+        and can easily be used alone in NodeJs and extended to any new framework
       </>
     ),
   },

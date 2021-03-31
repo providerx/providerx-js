@@ -31,7 +31,7 @@ export const useProvider = <T>(provider: BaseObservableProvider<T>) => {
     }, [provider])
 
     return {
-        isLoading: (currentValue === null || currentValue === undefined) && (currentError === null || currentError === undefined),
+        isLoading: currentValue === undefined && currentError === undefined,
         data: currentValue,
         error: currentError,
     } as UseProviderValues<T>

@@ -1,10 +1,7 @@
-import { ObservableProvider } from "react-providerx";
+import { ObservableProvider } from "react-providerx/lib/index";
 import { authState } from 'rxfire/auth'
-import { map } from 'rxjs/operators'
 import { auth } from "../utils/firebase";
 
-export const authStateProvider$ = new ObservableProvider(() => {
-    return authState(auth).pipe(
-        map(u => u === null ? 'not-logged-in': u)
-    )
+export const authStateProvider$ = new ObservableProvider<firebase.default.User | null>(() => {
+    return authState(auth)
 })
