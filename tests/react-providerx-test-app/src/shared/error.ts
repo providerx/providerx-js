@@ -1,5 +1,5 @@
 import { ObservableProvider } from "react-providerx";
-import { from, throwError } from "rxjs";
+import { from } from "rxjs";
 import { catchError } from "rxjs/operators";
 
 export const errorProvider$ = ObservableProvider.autoDispose((ref) => {
@@ -13,7 +13,7 @@ export const errorProvider$ = ObservableProvider.autoDispose((ref) => {
         catchError((error: Error) => {
             console.log('there was an error in fetching the api')
             ref.maintainState = false
-            return throwError(error)
+            return ref.error(error)
         }),
     )
 })

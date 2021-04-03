@@ -1,21 +1,19 @@
 import { BehaviorSubject, from, Observable, Subscription } from "rxjs";
-import { ProviderReference } from "../models/providerReference";
+import { AutoDisposeProviderReference } from "../models/providerReference";
 import { BaseObservableProvider } from "./base";
 
 export class AutoDisposeObservableProvider<T> extends BaseObservableProvider<T> {
     _valueSubject$: BehaviorSubject<T> | BehaviorSubject<undefined>
     _errorSubject$: BehaviorSubject<T> | BehaviorSubject<undefined>
     observableCreator
-    ref: ProviderReference
+    ref: AutoDisposeProviderReference
     _observable$: Observable<T>
     _internalSubscription?: Subscription
 
-    constructor(observableCreator: (ref: ProviderReference) => Observable<T>) {
+    constructor(observableCreator: (ref: AutoDisposeProviderReference) => Observable<T>) {
         super(observableCreator)
         this.observableCreator = observableCreator
-        this.ref = {
-            maintainState: true
-        }
+        this.ref = new AutoDisposeProviderReference(false)
         this._observable$ = new Observable()
         this._valueSubject$ = new BehaviorSubject(undefined)
         this._errorSubject$ = new BehaviorSubject(undefined)
@@ -26,22 +24,21 @@ export class AutoDisposeObservableProvider<T> extends BaseObservableProvider<T> 
     }
     
     _compute() {
-        this.ref = {
-            ...this.ref,
-            maintainState: true
-        }
+        this.ref = new AutoDisposeProviderReference(false)
         this._observable$ = this.observableCreator(this.ref)
         if(this._observable$ === null) {
             throw 'observableCreator cannot return null. It must return an instance of Observable'
         }
         this._internalSubscription = this._observable$.subscribe(
             (val: T) => {
-                this._valueSubject$.next(val as any)
-                this._errorSubject$.next(null as any)
+                if(this.ref.executionError !== undefined) {
+                    this._advanceError(this.ref.executionError)
+                    return
+                }
+                this._advanceValue(val)
             },
             (error: any) => {
-                this._errorSubject$.next(error as any)
-                this._valueSubject$.next(null as any)
+                this._advanceError(error)
             }
         )
     }

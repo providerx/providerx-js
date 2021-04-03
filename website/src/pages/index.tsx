@@ -9,7 +9,7 @@ import styles from './styles.module.css';
 const features = [
   {
     title: 'Boilerplate Free',
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    // imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
         No more writing extra boilerplate code. Just define your <code>ObservableProvider</code>
@@ -19,7 +19,7 @@ const features = [
   },
   {
     title: 'Easy State Access',
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    // imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
         Easily access your data and providers with simple hooks. You can also combine providers,
@@ -29,7 +29,7 @@ const features = [
   },
   {
     title: 'Framework Independent',
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    // imageUrl: 'img/undraw_docusaurus_react.svg',
     description: (
       <>
         The core logic of this library does not depend on any frontend Javascript framework
@@ -39,15 +39,16 @@ const features = [
   },
 ];
 
-function Feature({imageUrl, title, description}) {
-  const imgUrl = useBaseUrl(imageUrl);
+function Feature({title, description}) {
+  // const imgUrl = useBaseUrl(imageUrl);
   return (
     <div className={clsx('col col--4', styles.feature)}>
-      {imgUrl && (
+      {/* {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
         </div>
-      )}
+      )} */}
+
       <h3>{title}</h3>
       <p>{description}</p>
     </div>
@@ -60,7 +61,7 @@ export default function Home() {
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      description="Easy, maintanable state management with providers and RxJS">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
