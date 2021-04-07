@@ -13,6 +13,6 @@ export class AutoDisposeProviderReference extends ProviderReference {
   maintainState: boolean
   constructor(maintainState?: boolean) {
     super()
-    this.maintainState = maintainState ?? true
+    this.maintainState = maintainState ?? false
   }
 }

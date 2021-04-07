@@ -15,20 +15,14 @@ export const useProvider = <T>(provider: BaseObservableProvider<T>) => {
 
   useEffect(() => {
     const handleError = (error: any) => {
-      console.log('useProvider hook: The value of error is: ')
-      console.log(error)
       setCurrentError(error)
     }
 
     const handleLoading = (loading: boolean) => {
-      console.log('useProvider hook: The value of loading is: ')
-      console.log(loading)
       setLoading(loading)
     }
 
     const handleValue = (value: T | undefined) => {
-      console.log('useProvider hook: Got a value down the pipe: ')
-      console.log(value)
       setCurrentValue(value)
     }
     const [valueSubscription, errorSubscription] = provider.subscribe(

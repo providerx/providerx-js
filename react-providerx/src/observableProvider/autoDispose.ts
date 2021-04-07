@@ -19,23 +19,17 @@ export class AutoDisposeObservableProvider<
     this._observable$ = new Observable()
   }
 
-  static fromPromise<S>(
-    promise: () => Promise<S>
-  ): AutoDisposeObservableProvider<S> {
-    return new AutoDisposeObservableProvider<S>(() => from(promise()) as any)
-  }
-
   _reset() {
     if (this._internalSubscription !== undefined) {
       this._internalSubscription.unsubscribe()
     }
-    this._valueSubject$ = new BehaviorSubject<T | undefined>(undefined)
-    this._errorSubject$ = new BehaviorSubject<T | undefined>(undefined)
+    this._observable$ = new Observable()
+    this._valueSubject$.next(undefined)
+    this._errorSubject$.next(undefined)
   }
 
   _compute() {
     this.ref = new AutoDisposeProviderReference(false)
-    this._reset()
     this._observable$ = this.observableCreator(this.ref)
     if (this._observable$ === null) {
       throw 'observableCreator cannot return null. It must return an instance of Observable'
