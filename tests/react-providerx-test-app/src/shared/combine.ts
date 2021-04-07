@@ -1,19 +1,29 @@
-import { ObservableProvider } from 'react-providerx/lib'
+import { ObservableProvider } from 'react-providerx'
 import { from, of } from 'rxjs'
-import { switchMap } from 'rxjs/operators'
+import { catchError, switchMap } from 'rxjs/operators'
 
-const userIdProvider = new ObservableProvider(() => of('10'))
+export const userIdProvider = new ObservableProvider(() => {
+  const randomNumber = Math.floor(Math.random() * 10) + 1
+  return of(randomNumber)
+})
 
-export const userDataCombineProvider = new ObservableProvider(() => {
-    const fetchUserById = async (id: string) => {
-        // const response = await fetch('http://errortrial.com/')
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-        const json = await response.json()
-        return json
-    }
-    return userIdProvider.observable.pipe(
-        switchMap(id => {
-            return from(fetchUserById(id))
-        })
+export const userDataCombineProvider = new ObservableProvider((ref) => {
+  const fetchUserById = async (id: number) => {
+    // const response = await fetch('http://errortrial.com/')
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${id}`
     )
+    const json = await response.json()
+    return json
+  }
+  return userIdProvider.observable.pipe(
+    catchError((error) => {
+      console.log('Got error in userDataCombineProvider: ')
+      console.log(error)
+      return ref.error(error)
+    }),
+    switchMap((id) => {
+      return from(fetchUserById(id as number))
+    })
+  )
 })
