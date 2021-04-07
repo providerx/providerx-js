@@ -3,36 +3,50 @@ import { AutoDisposeObservableProvider } from '../observableProvider/autoDispose
 import { BaseObservableProvider } from '../observableProvider/base'
 
 type UseProviderValues<T> = {
-    isLoading: boolean
-    data: T
-    error: any
+  isLoading: boolean
+  data: T
+  error: any
 }
 
 export const useProvider = <T>(provider: BaseObservableProvider<T>) => {
-    const [currentValue, setCurrentValue]  = useState<T | null>(null)
-    const [currentError, setCurrentError] = useState<any | null>(null)
+  const [currentValue, setCurrentValue] = useState<T | undefined>(undefined)
+  const [currentError, setCurrentError] = useState<any | undefined>(undefined)
+  const [isLoading, setLoading] = useState<boolean>(false)
 
-    useEffect(() => {
-        const handleError = (error: any) => {
-            setCurrentError(error)
-        }
+  useEffect(() => {
+    const handleError = (error: any) => {
+      console.log('useProvider hook: The value of error is: ')
+      console.log(error)
+      setCurrentError(error)
+    }
 
-        const handleValue = (value: T) => {
-            setCurrentValue(value)
-        }
-        const [valueSubscription, errorSubscription] = provider.subscribe(handleValue, handleError)
-        return () => {
-            valueSubscription.unsubscribe()
-            errorSubscription.unsubscribe()
-            if(provider instanceof AutoDisposeObservableProvider) {
-                provider.registerUnsubscribe()
-            } 
-        }
-    }, [provider])
+    const handleLoading = (loading: boolean) => {
+      console.log('useProvider hook: The value of loading is: ')
+      console.log(loading)
+      setLoading(loading)
+    }
 
-    return {
-        isLoading: currentValue === undefined && currentError === undefined,
-        data: currentValue,
-        error: currentError,
-    } as UseProviderValues<T>
+    const handleValue = (value: T | undefined) => {
+      console.log('useProvider hook: Got a value down the pipe: ')
+      console.log(value)
+      setCurrentValue(value)
+    }
+    const [valueSubscription, errorSubscription] = provider.subscribe(
+      handleValue,
+      handleError
+    )
+    return () => {
+      valueSubscription.unsubscribe()
+      errorSubscription.unsubscribe()
+      if (provider instanceof AutoDisposeObservableProvider) {
+        provider.registerUnsubscribe()
+      }
+    }
+  }, [])
+
+  return {
+    isLoading: currentValue === undefined && currentError === undefined,
+    data: currentValue,
+    error: currentError,
+  } as UseProviderValues<T>
 }
